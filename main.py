@@ -6,7 +6,7 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 import os
 import api
-
+import streamlit as st
 # Constants
 SUMMARIZE_PROMPT = '''Write a brief outline on what the document is about.'''
 QUESTION_ANSWERS_PROMPT = '''Please divide the given text into sections, provide an excerpt from each section, create a relevant question for each excerpt, and then provide an answer based on the content.'''
@@ -60,12 +60,3 @@ def pdf_questions_answers(docsearch, chain):
     questions_answers = result
     return questions_answers
 
-
-# if __name__ == '__main__':
-#     pdf = ['physics.pdf']  # Add your own pdf
-#     merged_output = 'output.pdf'
-#     docsearch, chain = preprocess_text(pdf, merged_output)
-
-#     print(pdf_summary(docsearch, chain))  # Print part_1 (summary)
-#     print(pdf_questions_answers(docsearch, chain))  # Print part_2 (questions and answers)
-#     os.remove(merged_output)
