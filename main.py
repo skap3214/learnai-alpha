@@ -9,7 +9,7 @@ import api
 import streamlit as st
 # Constants
 SUMMARIZE_PROMPT = '''Write a brief outline on what the document is about.'''
-QUESTION_ANSWERS_PROMPT = '''Please divide the given text into sections, provide an excerpt from each section, create a relevant question for each excerpt, and then provide an answer based on the content.'''
+QUESTION_ANSWERS_PROMPT = '''Please divide the given text into sections, provide an important excerpt related to the topic from each section, create a relevant question for each excerpt, and then provide an answer based on the content.'''
 
 # Function to merge PDFs into a single file
 def merge_pdfs(pdfs, output):
