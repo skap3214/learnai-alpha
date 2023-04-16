@@ -4,8 +4,6 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
-import os
-import api
 import streamlit as st
 # Constants
 SUMMARIZE_PROMPT = '''Write a brief outline on what the document is about.'''
@@ -38,9 +36,9 @@ def preprocess_text(pdf_files_lst, merged_output):
     )
     texts = text_splitter.split_text(raw_text)
 
-    embeddings = OpenAIEmbeddings(openai_api_key=api.OPENAI_API_KEY)
+    embeddings = OpenAIEmbeddings(openai_api_key=st.secrets['OPENAI_API_KEY'])
     docsearch = FAISS.from_texts(texts, embeddings)
-    llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=api.OPENAI_API_KEY)
+    llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=st.secrets['OPENAI_API_KEY'])
 
     chain = load_qa_chain(llm=llm, chain_type="stuff")
 
