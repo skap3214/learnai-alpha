@@ -5,7 +5,4 @@ numpy
 openai-whisper
 opencv-python
 pandas
-whisper
-whisper-timestamped
-youtube-transcript-api
 PyPDF2
