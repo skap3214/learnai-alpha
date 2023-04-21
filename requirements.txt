@@ -1,9 +1,0 @@
-streamlit
-langchain
-openai
-numpy
-openai-whisper
-opencv-python
-pandas
-PyPDF2
-faiss-cpu

@@ -1,27 +1,42 @@
 import streamlit as st
-import main as back
-import os
 
-st.title("Learn:blue[AI]")
-st.cache_data()
-pdf = st.file_uploader("Upload your PDF files here", help="We currently only support .pdf files.",accept_multiple_files=True)
-submit = st.button("Submit",type='primary')
-st.write("---")
-if pdf and submit:
-    with st.spinner("Creating Interactive Learning Experience"):
-        try:
-            merged_output = 'output.pdf'
-            docsearch, chain = back.preprocess_text(pdf, merged_output)
-            st.subheader("Summary")
-            summary = back.pdf_summary(docsearch, chain)  # Print part_1 (summary)
-            st.write(summary)
-            st.subheader("Interactive Q&A")
-            qa = back.pdf_questions_answers(docsearch, chain)  # Print part_2 (questions and answers)
-            st.write(qa.replace("Question", "\n**Question**").replace("Answer", "\n**_Answer_**"))
-            os.remove(merged_output)
-        except:
-            st.error("There was an error trying to process the file. Please upload only PDFs with text")
-with st.sidebar:
-    st.title("About Learn:blue[AI]")
-    st.markdown("Learn:blue[AI] takes your content and makes it interactive so that you can learn better. Our early demo website showcases our vision of an AI-based learning platform. We aim to be the go-to resource for anyone looking to learn anything.")
+def main():
+    st.title("Learn.ai")
 
+    # Input for YouTube video URL
+    video_url = st.text_input("Enter YouTube video URL:")
+
+    col1, col2 = st.columns(2)
+
+    # col1
+    if video_url:
+        with col1:
+            st.video(video_url)
+
+    # col2
+    with col2:
+        button_col1, button_col2, button_col3 = st.columns(3)
+        with button_col1:
+            notes_button = st.button("Notes")
+        with button_col2:
+            mcq_button = st.button("MCQ")
+        with button_col3:
+            chatbot_button = st.button("Chatbot")
+
+        if notes_button:
+            # Display notes section
+            st.header("Notes")
+            st.text_area("Take notes here:")
+
+        elif mcq_button:
+            # Display MCQ section
+            st.header("MCQ")
+            # Add sample MCQs or user-defined MCQs
+
+        elif chatbot_button:
+            # Display chatbot section
+            st.header("Chatbot")
+            # Add your chatbot implementation
+
+if __name__ == "__main__":
+    main()
