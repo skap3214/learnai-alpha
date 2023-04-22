@@ -1,11 +1,16 @@
 import streamlit as st
-
-
+from text_grabber import ToText
+from text_conversions import Converter
 def display_video(col1, video_url):
     if video_url:
         st.session_state.video_url = video_url
         with col1:
             st.video(video_url)
+            st.write("Transcript:")
+            if "transcript" not in st.session_state:
+                st.session_state.transcript = ToText().yt_transcript(video_url)
+            st.write(st.session_state.transcript)
+
 
 
 def notes_tab(tab):
@@ -25,6 +30,7 @@ def mcq_tab(tab):
 
 def chat_tab(tab):
     with tab:
+        converter = Converter(st.session_state.transcript)
         st.header("Chat")
 
         if "conversation_history" not in st.session_state:
@@ -40,10 +46,10 @@ def chat_tab(tab):
             for message in st.session_state.conversation_history:
                 conversation.markdown(message, unsafe_allow_html=True)
             if user_input:
-                user_message = f'<span style="color:blue">**User:**</span> {user_input}'
+                user_message = f'<span style="color:blue">**You:**</span> {user_input}'
                 conversation.markdown(user_message, unsafe_allow_html=True)
                 st.session_state.conversation_history.append(user_message)
-                lenny_response = "Ok"
+                lenny_response = converter.chatbot(user_input)
                 lenny_message = f'<span style="color:green">**Lenny:**</span> {lenny_response}'
                 conversation.markdown(lenny_message, unsafe_allow_html=True)
                 st.session_state.conversation_history.append(lenny_message)
@@ -56,16 +62,16 @@ def main():
         st.session_state.video_url = ""
 
     video_url = st.text_input("Enter YouTube video URL:", value=st.session_state.video_url)
+    if video_url:
+        col1, col2 = st.columns([2, 1])
 
-    col1, col2 = st.columns([2, 1])
+        display_video(col1, video_url)
 
-    display_video(col1, video_url)
-
-    with col2:
-        tab1, tab2, tab3 = st.tabs(["Notes", "MCQ", "Chat"])
-        notes_tab(tab1)
-        mcq_tab(tab2)
-        chat_tab(tab3)
+        with col2:
+            tab1, tab2, tab3 = st.tabs(["Notes", "MCQ", "Chat"])
+            notes_tab(tab1)
+            mcq_tab(tab2)
+            chat_tab(tab3)
 
 
 if __name__ == "__main__":
