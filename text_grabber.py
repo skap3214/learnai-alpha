@@ -14,7 +14,7 @@ class ToText:
     Supported file types:
     - youtube
     '''
-    API_KEY = api.API_KEY
+    API_KEY = st.secrets["OPENAI_API_KEY"]
     #create a method called youtube which takes in a URL as a parameter
     def youtube(self,video_URL,timestamp_yes = False, as_string = True):
         '''
