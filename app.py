@@ -42,29 +42,30 @@ def chat_tab(tab):
         with st.expander("Chat History", expanded=True):
             conversation = st.container()
             
-            # Add CSS style to chat history messages
             st.markdown("""
-                <style>
-                    .message-container {
-                        margin-bottom: 10px;
-                        overflow: auto;
-                    }
-                    .message-container .message {
-                        margin: 5px 10px;
-                        padding: 5px 10px;
-                        border-radius: 10px;
-                        max-width: 60%;
-                    }
-                    .message-container .user-message {
-                        background-color: #007AFF;
-                        color: white;
-                        float: right;
-                    }
-                    .message-container .bot-message {
-                        background-color: #E5E5EA;
-                        float: left;
-                    }
-                </style>
+            <style>
+                .message-container {
+                    margin-bottom: 10px;
+                    overflow: auto;
+                }
+                .message-container .message {
+                    margin: 5px 10px;
+                    padding: 5px 10px;
+                    border-radius: 10px;
+                    max-width: 60%;
+                }
+                .message-container .user-message {
+                    background-color: #007AFF;
+                    color: white;
+                    float: right;
+                }
+                .message-container .bot-message {
+                    background-color: #1c1c1e;
+                    color: white;
+                    float: left;
+                }
+            </style>
+
             """, unsafe_allow_html=True)
             
             conversation.markdown(f'<div class="message-container"><div class="message bot-message">Hi! How can I help you?</div></div>',
@@ -73,19 +74,19 @@ def chat_tab(tab):
             for message in st.session_state.conversation_history:
                 conversation.markdown(message, unsafe_allow_html=True)
             
-            user_input = st.text_input("Enter your message:")
+            user_input = st.text_input("Enter your message:", value="", key="chatbot_input")
             
             if user_input:
                 user_message = f'<div class="message-container"><div class="message user-message">{user_input}</div></div>'
                 conversation.markdown(user_message, unsafe_allow_html=True)
                 st.session_state.conversation_history.append(user_message)
+                st.session_state.chatbot_input = ""
                 
                 lenny_response = converter.chatbot(user_input)
                 lenny_message = f'<div class="message-container"><div class="message bot-message">{lenny_response}</div></div>'
                 conversation.markdown(lenny_message, unsafe_allow_html=True)
                 st.session_state.conversation_history.append(lenny_message)
-                
-                user_input = ''
+
 
 
 def main():
