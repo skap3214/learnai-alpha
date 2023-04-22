@@ -1,6 +1,7 @@
 import streamlit as st
-from text_grabber import ToText
+from text_grabber import Text
 from text_conversions import Converter
+
 st.set_page_config(
     page_title="LearnAI",
     layout="wide"
@@ -12,10 +13,8 @@ def display_video(col1, video_url):
             st.video(video_url)
             st.write("Transcript:")
             if "transcript" not in st.session_state:
-                st.session_state.transcript = ToText().youtube(video_url)
+                st.session_state.transcript = Text().youtube(video_url)
             st.write(st.session_state.transcript)
-
-
 
 def notes_tab(tab):
     with tab:

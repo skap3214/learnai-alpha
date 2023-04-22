@@ -1,11 +1,13 @@
 import os
+import re
 from PyPDF2 import PdfReader, PdfMerger
 import whisper_timestamped as whisper
 from pytube import YouTube
 import ffmpeg
 import streamlit as st
+from youtube_transcript_api import YouTubeTranscriptApi
 
-class ToText:
+class Text:
     '''
     to convert a type of file to text, call the type of file as the method name.
     e.g: If you want to convert a youtube video to text:
@@ -16,7 +18,36 @@ class ToText:
     '''
     API_KEY = st.secrets["OPENAI_API_KEY"]
     #create a method called youtube which takes in a URL as a parameter
-    def youtube(self,video_URL,timestamp_yes = False, as_string = True):
+    def youtube(self, video_url):
+        '''
+        video_url:
+        this param is a youtube video url.
+        '''
+        try:
+            return self._caption_youtube(video_url)
+        except:
+            return self._whispter_youtube(video_url)
+    def _extract_youtube_id(self, video_url):
+        if "youtube" not in video_url:
+            raise ValueError("Invalid YouTube URL")
+        youtube_id = re.search(r'v=([^&]+)', video_url).group(1)
+        return youtube_id.strip()
+
+    def _get_text_timed(self, youtube_id):
+        try:
+            return YouTubeTranscriptApi.get_transcript(youtube_id, languages=['en', 'en-GB', 'en-US'])
+        except:
+            raise ValueError("Unable to transcribe YouTube URL")
+
+    def _timed_to_string(self, timed_text):
+        return ' '.join([t['text'] for t in timed_text])
+
+    def _caption_youtube(self, video_url):
+        youtube_id = self._extract_youtube_id(video_url)
+        timed_text = self._get_text_timed(youtube_id)
+        return self._timed_to_string(timed_text)
+
+    def _whispter_youtube(self,video_url,timestamp_yes = False, as_string = True):
         '''
         timestamp_yes:
         this param is set to False as default. If you set it as True, the method will return a tuple of two elements(transcript, timestamps)
@@ -26,7 +57,7 @@ class ToText:
         '''
         output_file = "audio.mp3"
         # Get the YouTube object
-        yt = YouTube(video_URL)
+        yt = YouTube(video_url)
 
         # Download the highest quality audio stream
         audio_stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
