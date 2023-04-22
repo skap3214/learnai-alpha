@@ -4,6 +4,7 @@ import whisper_timestamped as whisper
 from pytube import YouTube
 import ffmpeg
 import apikey as api
+import streamlit as st
 class ToText:
     '''
     to convert a type of file to text, call the type of file as the method name.

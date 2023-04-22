@@ -5,6 +5,8 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 import json
 import apikey as api
+import streamlit as st
+
 class Converter:
     '''
     converts to everything from text. To call a specific method, 
@@ -16,7 +18,7 @@ class Converter:
     - mcq->json
     - chatbot
     '''
-    API_KEY = api.API_KEY
+    API_KEY = st.secrets["OPENAI_API_KEY"]
 
     def __init__(self, text : str):
         '''

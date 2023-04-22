@@ -1,6 +1,10 @@
 import streamlit as st
 from text_grabber import ToText
 from text_conversions import Converter
+st.set_page_config(
+    page_title="LearnAI",
+    layout="wide"
+)
 def display_video(col1, video_url):
     if video_url:
         st.session_state.video_url = video_url
