@@ -3,6 +3,8 @@ from PyPDF2 import PdfReader, PdfMerger
 import whisper_timestamped as whisper
 from pytube import YouTube
 import ffmpeg
+import streamlit as st
+
 class ToText:
     '''
     to convert a type of file to text, call the type of file as the method name.
@@ -12,7 +14,7 @@ class ToText:
     Supported file types:
     - youtube
     '''
-    API_KEY = "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"
+    API_KEY = st.secrets["OPENAI_API_KEY"]
     #create a method called youtube which takes in a URL as a parameter
     def youtube(self,video_URL,timestamp_yes = False, as_string = True):
         '''

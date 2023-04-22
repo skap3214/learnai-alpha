@@ -4,15 +4,15 @@ from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 import json
+import streamlit as st
 from text_grabber import ToText
-
 class Converter:
     '''
     Supported text conversion methods:
     - mcq->json
     - chatbot
     '''
-    API_KEY = "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"
+    API_KEY = st.secrets["OPENAI_API_KEY"]
 
     def __init__(self, text : str):
         '''
