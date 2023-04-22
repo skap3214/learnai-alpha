@@ -64,6 +64,21 @@ def chat_tab(tab):
                     color: white;
                     float: left;
                 }
+                .loader {
+                    border-top: 5px solid rgba(255, 255, 255, 0.2);
+                    border-right: 5px solid rgba(255, 255, 255, 0.2);
+                    border-bottom: 5px solid rgba(255, 255, 255, 0.2);
+                    border-left: 5px solid white;
+                    animation: spin 0.8s linear infinite;
+                }
+                @keyframes spin {
+                    from {
+                        transform: rotate(0deg);
+                    }
+                    to {
+                        transform: rotate(360deg);
+                    }
+                }
             </style>
 
             """, unsafe_allow_html=True)
@@ -81,12 +96,14 @@ def chat_tab(tab):
                 conversation.markdown(user_message, unsafe_allow_html=True)
                 st.session_state.conversation_history.append(user_message)
                 
-                lenny_response = converter.chatbot(user_input)
-                lenny_message = f'<div class="message-container"><div class="message bot-message">{lenny_response}</div></div>'
-                conversation.markdown(lenny_message, unsafe_allow_html=True)
-                st.session_state.conversation_history.append(lenny_message)
+                with st.spinner("Thinking..."):
+                    lenny_response = converter.chatbot(user_input)
+                    lenny_message = f'<div class="message-container"><div class="message bot-message">{lenny_response}</div></div>'
+                    conversation.markdown(lenny_message, unsafe_allow_html=True)
+                    st.session_state.conversation_history.append(lenny_message)
                 
                 user_input = ''
+
 
 
 def main():
