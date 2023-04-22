@@ -5,7 +5,7 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 import json
 import streamlit as st
-from text_grabber import ToText
+from text_grabber import Text
 class Converter:
     '''
     Supported text conversion methods:
@@ -95,7 +95,7 @@ class Converter:
         return result
     
     def generate_code(self, youtube_url):
-        to_text = ToText()
+        to_text = Text()
         transcript = to_text.youtube(youtube_url)
         self.text = transcript
         question = "Create a code prompt and correct code answer using the whole text as context"
