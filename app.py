@@ -8,7 +8,7 @@ def display_video(col1, video_url):
             st.video(video_url)
             st.write("Transcript:")
             if "transcript" not in st.session_state:
-                st.session_state.transcript = ToText().yt_transcript(video_url)
+                st.session_state.transcript = ToText().youtube(video_url)
             st.write(st.session_state.transcript)
 
 
