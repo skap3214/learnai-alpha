@@ -6,7 +6,7 @@ from pytube import YouTube
 import ffmpeg
 import streamlit as st
 from youtube_transcript_api import YouTubeTranscriptApi
-
+import subprocess
 class Text:
     '''
     to convert a type of file to text, call the type of file as the method name.
@@ -55,19 +55,10 @@ class Text:
         as_string:
         this param is set to True as defualt. If you set it as False, the method will return a list of words. otherwise it returns the transcript as a string.
         '''
-        output_file = "audio.mp3"
-        # Get the YouTube object
-        yt = YouTube(video_url)
-
-        # Download the highest quality audio stream
-        audio_stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
-
-        # Download the audio file
-        audio_file = audio_stream.download(filename='temp_audio')
-
-        # Convert the downloaded audio file to MP3
-        input_audio = ffmpeg.input(audio_file)
-        ffmpeg.output(input_audio, output_file, format='mp3').run()
+        output_filename = "audio.mp3"
+        command = f'python3 -m pip install --force-reinstall https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz && yt-dlp -x --audio-format mp3 -o "{output_filename}" {video_URL}'
+        subprocess.call(command, shell=True)
+        
         # Load the audio file
         audio = whisper.load_audio("audio.mp3")
 
@@ -76,7 +67,6 @@ class Text:
 
         # Transcribe the audio
         result = whisper.transcribe(model, audio, language="en")
-
 
         # Save the result to a JSON file
         timestamps = []
@@ -89,11 +79,13 @@ class Text:
                 start = dict_1['start']
                 end = dict_1['end']
                 transcript.append(word)
-                timestamps.append((start,end))
+                timestamps.append((start, end))
+
         os.remove("audio.mp3")
-        os.remove(audio_file)
+
         if as_string:
             transcript = " ".join(transcript)
+
         if timestamp_yes:
             return transcript, timestamps
         else:
@@ -103,7 +95,6 @@ class Text:
         '''
         pdf_list:
         this param is a list of pdf files.
-        #TODO: NOT TESTED
         '''
         merger = PdfMerger()
         
