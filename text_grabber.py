@@ -3,7 +3,6 @@ from PyPDF2 import PdfReader, PdfMerger
 import whisper_timestamped as whisper
 from pytube import YouTube
 import ffmpeg
-import apikey as api
 import streamlit as st
 class ToText:
     '''
