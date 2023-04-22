@@ -74,19 +74,19 @@ def chat_tab(tab):
             for message in st.session_state.conversation_history:
                 conversation.markdown(message, unsafe_allow_html=True)
             
-            user_input = st.text_input("Enter your message:", value="", key="chatbot_input")
+            user_input = st.text_input("Enter your message:")
             
             if user_input:
                 user_message = f'<div class="message-container"><div class="message user-message">{user_input}</div></div>'
                 conversation.markdown(user_message, unsafe_allow_html=True)
                 st.session_state.conversation_history.append(user_message)
-                st.session_state.chatbot_input = ""
                 
                 lenny_response = converter.chatbot(user_input)
                 lenny_message = f'<div class="message-container"><div class="message bot-message">{lenny_response}</div></div>'
                 conversation.markdown(lenny_message, unsafe_allow_html=True)
                 st.session_state.conversation_history.append(lenny_message)
-
+                
+                user_input = ''
 
 
 def main():
