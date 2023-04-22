@@ -4,6 +4,7 @@ from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 import json
+import apikey as api
 class Converter:
     '''
     converts to everything from text. To call a specific method, 
@@ -15,7 +16,7 @@ class Converter:
     - mcq->json
     - chatbot
     '''
-    API_KEY = "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"
+    API_KEY = api.API_KEY
 
     def __init__(self, text : str):
         '''
