@@ -54,12 +54,12 @@ def chat_tab(tab):
                     max-width: 60%;
                 }
                 .message-container .user-message {
-                    background-color: #007AFF;
+                    background-color: #0885FF;
                     color: white;
                     float: right;
                 }
                 .message-container .bot-message {
-                    background-color: #1c1c1e;
+                    background-color: #3B3B3D;
                     color: white;
                     float: left;
                 }
