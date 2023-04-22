@@ -1,3 +1,4 @@
+import requests
 import streamlit as st
 from text_grabber import Text
 from text_conversions import Converter
@@ -32,7 +33,6 @@ def mcq_tab(tab):
 
 def chat_tab(tab):
     with tab:
-        converter = Converter(st.session_state.transcript)
         st.header("Chat")
 
         if "conversation_history" not in st.session_state:
@@ -96,12 +96,11 @@ def chat_tab(tab):
                 st.session_state.conversation_history.append(user_message)
                 
                 with st.spinner("Thinking..."):
-                    lenny_response = converter.chatbot(user_input)
+                    response = requests.post("http://127.0.0.1:5000/chatbot", json={"text": st.session_state.transcript, "question": user_input})
+                    lenny_response = response.json()["response"]
                     lenny_message = f'<div class="message-container"><div class="message bot-message">{lenny_response}</div></div>'
                     conversation.markdown(lenny_message, unsafe_allow_html=True)
                     st.session_state.conversation_history.append(lenny_message)
-                
-                user_input = ''
 
 
 
