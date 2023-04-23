@@ -72,3 +72,5 @@ wrapt==1.14.1
 wsproto==1.2.0
 XlsxWriter==3.1.0
 youtube-transcript-api
+Flask
+Flask-Cors
