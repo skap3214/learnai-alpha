@@ -1,7 +1,16 @@
 from flask import Flask, request, jsonify
 from text_conversions import Converter
+from text_grabber import Text
 
 app = Flask(__name__)
+
+@app.route('/transcript', methods=['POST'])
+def text():
+    data = request.get_json()
+    youtube_url = data.get('url')
+    text_grabber = Text()
+    transcript = text_grabber.youtube(youtube_url)
+    return jsonify({"response": transcript})
 
 @app.route('/mcq', methods=['POST'])
 def mcq():

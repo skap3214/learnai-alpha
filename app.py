@@ -1,7 +1,5 @@
 import requests
 import streamlit as st
-from text_grabber import Text
-from text_conversions import Converter
 
 st.set_page_config(
     page_title="LearnAI",
@@ -14,7 +12,8 @@ def display_video(col1, video_url):
             st.video(video_url)
             st.write("Transcript:")
             if "transcript" not in st.session_state:
-                st.session_state.transcript = Text().youtube(video_url)
+                response = requests.post("http://127.0.0.1:5000/transcript", json={"url": video_url})
+                st.session_state.transcript = response.json()["response"]
             st.write(st.session_state.transcript)
 
 def notes_tab(tab):
