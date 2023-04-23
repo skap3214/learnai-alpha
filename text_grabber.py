@@ -56,7 +56,7 @@ class Text:
         this param is set to True as defualt. If you set it as False, the method will return a list of words. otherwise it returns the transcript as a string.
         '''
         output_filename = "audio.mp3"
-        command = f'python3 -m pip install --force-reinstall https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz && yt-dlp -x --audio-format mp3 -o "{output_filename}" {video_URL}'
+        command = f'python3 -m pip install --force-reinstall https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz && yt-dlp -x --audio-format mp3 -o "{output_filename}" {video_url}'
         subprocess.call(command, shell=True)
         
         # Load the audio file
