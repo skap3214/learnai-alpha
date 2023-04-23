@@ -11,6 +11,8 @@ st.set_page_config(
 def display_video(col1, video_url):
     if video_url:
         st.session_state.video_url = video_url
+        if 'conversation_history' in st.session_state:
+            del st.session_state.conversation_history
         with col1:
             st.video(video_url)
             if "transcript" not in st.session_state:
@@ -26,7 +28,8 @@ def display_video(col1, video_url):
 def notes_tab(tab):
     with tab:
         st.header("Notes")
-        st.text_area("Take notes here:")
+        cheat_sheet = Converter(st.session_state.transcript).cheat_sheet()
+        st.text_area("Take notes here:", value = cheat_sheet)
 
 
 def mcq_tab(tab):
@@ -125,9 +128,10 @@ def main():
 
         with col2:
             tab1, tab2, tab3 = st.tabs(["Notes", "MCQ", "Chat"])
-            notes_tab(tab1)
-            mcq_tab(tab2)
-            chat_tab(tab3)
+            with st.spinner("Loading..."):
+                notes_tab(tab1)
+                mcq_tab(tab2)
+                chat_tab(tab3)
 
 
 if __name__ == "__main__":
