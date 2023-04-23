@@ -21,9 +21,34 @@ def notes_tab(tab):
         st.header("Notes")
         st.text_area("Take notes here:")
 
+def display_quiz(quiz_questions):
+    with st.expander("Take quiz"):
+        selected_answers = [None] * len(quiz_questions)
+        for i, q in enumerate(quiz_questions):
+            st.write("Question", i + 1)
+            st.write(q["question"])
+            selected_answer = st.radio("Choose an option", q["options"])
+            selected_answers[i] = selected_answer
+
+        if st.button("Submit"):
+            st.write("Results:")
+            score = 0
+            for i, q in enumerate(quiz_questions):
+                if q["correct_answer"] == selected_answers[i]:
+                    score += 1
+                    st.write("Question", i + 1, "is correct.")
+                else:
+                    st.write("Question", i + 1, "is incorrect.")
+
+            st.write("Score:", score, "out of", len(quiz_questions))
 
 def mcq_tab(tab):
     with tab:
+        transcript = st.session_state.transcript
+        get_mcq = Converter(transcript)
+        mcq = get_mcq.mcq()
+        display_mcq = display_quiz(mcq)
+        st.write(display_mcq)
         st.header("MCQ")
         st.subheader(f"Question {1}")
         st.radio("Choices", ["A", "B", "C", "D"])
