@@ -1,56 +1,36 @@
-import requests
 import streamlit as st
-import text_conversions as tc
+from text_grabber import Text
+from text_conversions import Converter
+from streamlit_ace import st_ace
+
 st.set_page_config(
     page_title="LearnAI",
     layout="wide"
 )
+
 def display_video(col1, video_url):
     if video_url:
         st.session_state.video_url = video_url
         with col1:
             st.video(video_url)
-            st.write("Transcript:")
             if "transcript" not in st.session_state:
-                response = requests.post("http://127.0.0.1:5000/transcript", json={"url": video_url})
-                st.session_state.transcript = response.json()["response"]
-            st.write(st.session_state.transcript)
-
+                st.session_state.transcript = Text().youtube(video_url)
+            st.session_state.transcript = Text().youtube(video_url)
+            code_dict = Converter(st.session_state.transcript).generate_code(st.session_state.video_url)
+            prompt = code_dict['prompt']
+            answer = code_dict['answer']
+            st.write("Question", prompt)
+            content = st_ace(theme = "ambiance")
+            with st.expander("Answer", expanded=False):
+                st.write(answer)
 def notes_tab(tab):
     with tab:
         st.header("Notes")
-        converter = tc.Converter(st.session_state.transcript)
-        cheat_sheet = converter.cheat_sheet()
-        st.text_area("Take notes here:",value=cheat_sheet)
+        st.text_area("Take notes here:")
 
-def display_quiz(quiz_questions):
-    with st.expander("Take quiz"):
-        selected_answers = [None] * len(quiz_questions)
-        for i, q in enumerate(quiz_questions):
-            st.write("Question", i + 1)
-            st.write(q["question"])
-            selected_answer = st.radio("Choose an option", q["options"])
-            selected_answers[i] = selected_answer
-
-        if st.button("Submit"):
-            st.write("Results:")
-            score = 0
-            for i, q in enumerate(quiz_questions):
-                if q["correct_answer"] == selected_answers[i]:
-                    score += 1
-                    st.write("Question", i + 1, "is correct.")
-                else:
-                    st.write("Question", i + 1, "is incorrect.")
-
-            st.write("Score:", score, "out of", len(quiz_questions))
 
 def mcq_tab(tab):
     with tab:
-        transcript = st.session_state.transcript
-        get_mcq = tc.Converter(transcript)
-        mcq = get_mcq.mcq()
-        display_mcq = display_quiz(mcq)
-        st.write(display_mcq)
         st.header("MCQ")
         st.subheader(f"Question {1}")
         st.radio("Choices", ["A", "B", "C", "D"])
@@ -59,6 +39,7 @@ def mcq_tab(tab):
 
 def chat_tab(tab):
     with tab:
+        converter = Converter(st.session_state.transcript)
         st.header("Chat")
 
         if "conversation_history" not in st.session_state:
@@ -105,7 +86,6 @@ def chat_tab(tab):
                     }
                 }
             </style>
-
             """, unsafe_allow_html=True)
             
             conversation.markdown(f'<div class="message-container"><div class="message bot-message">Hi! How can I help you?</div></div>',
@@ -122,16 +102,17 @@ def chat_tab(tab):
                 st.session_state.conversation_history.append(user_message)
                 
                 with st.spinner("Thinking..."):
-                    response = requests.post("http://127.0.0.1:5000/chatbot", json={"text": st.session_state.transcript, "question": user_input})
-                    lenny_response = response.json()["response"]
+                    lenny_response = converter.chatbot(user_input)
                     lenny_message = f'<div class="message-container"><div class="message bot-message">{lenny_response}</div></div>'
                     conversation.markdown(lenny_message, unsafe_allow_html=True)
                     st.session_state.conversation_history.append(lenny_message)
+                
+                user_input = ''
 
 
 
 def main():
-    st.title("Learn.ai")
+    st.title("Learn.:blue[ai]")
 
     if "video_url" not in st.session_state:
         st.session_state.video_url = ""
