@@ -24,38 +24,19 @@ def notes_tab(tab):
         st.text_area("Take notes here:",value=cheat_sheet)
 
 def display_quiz(quiz_questions):
-    with st.expander("Take quiz"):
-        selected_answers = [None] * len(quiz_questions)
-        for i, q in enumerate(quiz_questions):
-            st.write("Question", i + 1)
-            st.write(q["question"])
-            selected_answer = st.radio("Choose an option", q["options"])
-            selected_answers[i] = selected_answer
-
-        if st.button("Submit"):
-            st.write("Results:")
-            score = 0
-            for i, q in enumerate(quiz_questions):
-                if q["correct_answer"] == selected_answers[i]:
-                    score += 1
-                    st.write("Question", i + 1, "is correct.")
-                else:
-                    st.write("Question", i + 1, "is incorrect.")
-
-            st.write("Score:", score, "out of", len(quiz_questions))
+    for number, questions in quiz_questions.items():
+        st.write(f"{number}. {questions['question']}")
+        for option, answer in questions.items():
+            if option != 'correct' and option != 'question':
+                st.write(f"     {option}   {answer}")
+                st.write("---")
 
 def mcq_tab(tab):
     with tab:
         transcript = st.session_state.transcript
         get_mcq = tc.Converter(transcript)
         mcq = get_mcq.mcq()
-        display_mcq = display_quiz(mcq)
-        st.write(display_mcq)
-        st.header("MCQ")
-        st.subheader(f"Question {1}")
-        st.radio("Choices", ["A", "B", "C", "D"])
-        if st.button("Submit"):
-            st.success("Correct!")
+        display_quiz(mcq)
 
 def chat_tab(tab):
     with tab:
@@ -143,10 +124,10 @@ def main():
         display_video(col1, video_url)
 
         with col2:
-            tab1, tab2, tab3 = st.tabs(["Notes", "MCQ", "Chat"])
+            tab1, tab2, tab3 = st.tabs(["Notes", "Chat", "MCQ"])
             notes_tab(tab1)
-            mcq_tab(tab2)
-            chat_tab(tab3)
+            chat_tab(tab2)
+            mcq_tab(tab3)
 
 
 if __name__ == "__main__":
