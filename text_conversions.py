@@ -92,9 +92,20 @@ class Converter:
         return result
 
     def cheat_sheet(self):
-        prompt = "Create a cheat sheet"
-        result = self._process_text(prompt, '')
+        prompt = '''
+        Summarize the key points and please provide syntax, key details, and examples for each topic in a structured format like this:
 
+        1. Range Function
+        Key Details: range takes two arguments, the first argument is the starting number, the second argument is the ending number.
+        Example: range(1, 10)
+        
+        2. Print Statement
+        Key Details: shows the output of a value.
+        Example: print('Hello, World!')
+        
+        3. ...'''
+
+        result = self._process_text(prompt, '')
         return result
     
     def generate_code(self, youtube_url):

@@ -27,12 +27,12 @@ def display_video(col1, video_url):
             content = st_ace(theme = "ambiance")
             with st.expander("Answer", expanded=False):
                 st.write(answer)
+
 def notes_tab(tab):
     with tab:
         st.header("Notes")
         cheat_sheet = Converter(st.session_state.transcript).cheat_sheet()
-        st.text_area("Take notes here:", value = cheat_sheet)
-
+        st.text_area("Take notes here:", value = cheat_sheet, height=450)
 
 @st.spinner("Grading your quiz...")
 def display_quiz(quiz_questions):
