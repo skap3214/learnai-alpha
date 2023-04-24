@@ -1,4 +1,6 @@
 import streamlit as st
+import text_conversions as tc
+import json
 from text_grabber import Text
 from text_conversions import Converter
 from streamlit_ace import st_ace
@@ -32,13 +34,38 @@ def notes_tab(tab):
         st.text_area("Take notes here:", value = cheat_sheet)
 
 
+@st.spinner("Grading your quiz...")
+def display_quiz(quiz_questions):
+    with st.form("quiz"):
+        num_questions = len(quiz_questions)
+        correct_count = 0
+        
+        for number, question in quiz_questions.items():
+            st.write(f"{number}. {question['question']}")
+            
+            user_answer = st.radio("", list(question.values())[1:5], index=0)
+            correct_option = question['correct']
+            correct = question[correct_option]
+            
+            if user_answer == correct:
+                correct_count += 1
+            
+            st.write("---")
+        if st.form_submit_button("Submit"):
+            st.write(f"You scored {correct_count} out of {num_questions}!")
+            st.balloons()
+
+@st.cache_data
+def get_json():
+    transcript = st.session_state.transcript
+    convert = tc.Converter(transcript)
+    get_mcq = convert.mcq()
+
 def mcq_tab(tab):
-    with tab:
-        st.header("MCQ")
-        st.subheader(f"Question {1}")
-        st.radio("Choices", ["A", "B", "C", "D"])
-        if st.button("Submit"):
-            st.success("Correct!")
+    with open('mcq.json', 'r') as f:
+        quiz_questions = json.load(f)
+    
+    display_quiz(quiz_questions)  
 
 def chat_tab(tab):
     with tab:
