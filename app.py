@@ -49,6 +49,7 @@ def get_json():
     convert = tc.Converter(transcript)
     get_mcq = convert.mcq()
 
+@st.cache
 def mcq_tab(tab):
     with open('mcq.json', 'r') as f:
         quiz_questions = json.load(f)
