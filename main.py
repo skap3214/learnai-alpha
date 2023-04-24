@@ -142,6 +142,7 @@ def chat_tab(tab):
 
 
 def main():
+    get_json()
     st.title("Learn.:blue[ai]")
 
     if "video_url" not in st.session_state:
