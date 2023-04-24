@@ -55,17 +55,8 @@ def display_quiz(quiz_questions):
             st.write(f"You scored {correct_count} out of {num_questions}!")
             st.balloons()
 
-@st.cache_data
-def get_json():
-    transcript = st.session_state.transcript
-    convert = tc.Converter(transcript)
-    get_mcq = convert.mcq()
-
 def mcq_tab(tab):
-    with open('mcq.json', 'r') as f:
-        quiz_questions = json.load(f)
-    
-    display_quiz(quiz_questions)  
+    pass
 
 def chat_tab(tab):
     with tab:
@@ -142,7 +133,6 @@ def chat_tab(tab):
 
 
 def main():
-    get_json()
     st.title("Learn.:blue[ai]")
 
     if "video_url" not in st.session_state:
