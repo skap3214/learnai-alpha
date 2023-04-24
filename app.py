@@ -43,6 +43,7 @@ def display_quiz(quiz_questions):
             st.write("---")
         if st.form_submit_button("Submit"):
             st.write(f"You scored {correct_count} out of {num_questions}!")
+            st.balloons()
 
 @st.cache_data
 def get_json():
