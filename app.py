@@ -1,4 +1,5 @@
 import requests
+import json
 import streamlit as st
 import text_conversions as tc
 st.set_page_config(
@@ -27,12 +28,14 @@ def display_quiz(quiz_questions):
     num_questions = len(quiz_questions)
     correct_count = 0
     
-    for number, questions in quiz_questions.items():
-        st.write(f"{number}. {questions['question']}")
+    for number, question in quiz_questions.items():
+        st.write(f"{number}. {question['question']}")
         
-        user_answer = st.radio("", list(questions.values())[1:5])
+        user_answer = st.radio("", list(question.values())[1:5], index=0)
+        correct_option = question['correct']
+        correct = question[correct_option]
         
-        if user_answer == questions['correct']:
+        if user_answer == correct:
             st.write("Correct!")
             correct_count += 1
         else:
@@ -42,12 +45,18 @@ def display_quiz(quiz_questions):
     
     st.write(f"You scored {correct_count} out of {num_questions}!")
 
+@st.cache_data
+def get_json():
+    transcript = st.session_state.transcript
+    convert = tc.Converter(transcript)
+    get_mcq = convert.mcq()
+
 def mcq_tab(tab):
-    with tab:
-        transcript = st.session_state.transcript
-        get_mcq = tc.Converter(transcript)
-        mcq = get_mcq.mcq()
-        display_quiz(mcq)
+    with open('mcq.json', 'r') as f:
+        quiz_questions = json.load(f)
+    
+    display_quiz(quiz_questions)
+            
 
 def chat_tab(tab):
     with tab:
@@ -124,7 +133,6 @@ def chat_tab(tab):
 
 def main():
     st.title("Learn.ai")
-
     if "video_url" not in st.session_state:
         st.session_state.video_url = ""
 
@@ -138,6 +146,7 @@ def main():
             tab1, tab2, tab3 = st.tabs(["Notes", "Chat", "MCQ"])
             notes_tab(tab1)
             chat_tab(tab2)
+            get_json()
             mcq_tab(tab3)
 
 
