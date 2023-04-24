@@ -24,12 +24,23 @@ def notes_tab(tab):
         st.text_area("Take notes here:",value=cheat_sheet)
 
 def display_quiz(quiz_questions):
+    num_questions = len(quiz_questions)
+    correct_count = 0
+    
     for number, questions in quiz_questions.items():
         st.write(f"{number}. {questions['question']}")
-        for option, answer in questions.items():
-            if option != 'correct' and option != 'question':
-                st.write(f"     {option}   {answer}")
-                st.write("---")
+        
+        user_answer = st.radio("", list(questions.values())[1:5])
+        
+        if user_answer == questions['correct']:
+            st.write("Correct!")
+            correct_count += 1
+        else:
+            st.write("Incorrect.")
+        
+        st.write("---")
+    
+    st.write(f"You scored {correct_count} out of {num_questions}!")
 
 def mcq_tab(tab):
     with tab:
