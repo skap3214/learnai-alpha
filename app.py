@@ -25,25 +25,23 @@ def notes_tab(tab):
         st.text_area("Take notes here:",value=cheat_sheet)
 
 def display_quiz(quiz_questions):
-    num_questions = len(quiz_questions)
-    correct_count = 0
-    
-    for number, question in quiz_questions.items():
-        st.write(f"{number}. {question['question']}")
+    with st.form("quiz"):
+        num_questions = len(quiz_questions)
+        correct_count = 0
         
-        user_answer = st.radio("", list(question.values())[1:5], index=0)
-        correct_option = question['correct']
-        correct = question[correct_option]
-        
-        if user_answer == correct:
-            st.write("Correct!")
-            correct_count += 1
-        else:
-            st.write("Incorrect.")
-        
-        st.write("---")
-    
-    st.write(f"You scored {correct_count} out of {num_questions}!")
+        for number, question in quiz_questions.items():
+            st.write(f"{number}. {question['question']}")
+            
+            user_answer = st.radio("", list(question.values())[1:5], index=0)
+            correct_option = question['correct']
+            correct = question[correct_option]
+            
+            if user_answer == correct:
+                correct_count += 1
+            
+            st.write("---")
+        if st.form_submit_button("Submit"):
+            st.write(f"You scored {correct_count} out of {num_questions}!")
 
 @st.cache_data
 def get_json():
@@ -55,8 +53,7 @@ def mcq_tab(tab):
     with open('mcq.json', 'r') as f:
         quiz_questions = json.load(f)
     
-    display_quiz(quiz_questions)
-            
+    display_quiz(quiz_questions)    
 
 def chat_tab(tab):
     with tab:
@@ -129,8 +126,6 @@ def chat_tab(tab):
                     conversation.markdown(lenny_message, unsafe_allow_html=True)
                     st.session_state.conversation_history.append(lenny_message)
 
-
-
 def main():
     st.title("Learn.ai")
     if "video_url" not in st.session_state:
@@ -148,7 +143,6 @@ def main():
             chat_tab(tab2)
             get_json()
             mcq_tab(tab3)
-
 
 if __name__ == "__main__":
     main()
