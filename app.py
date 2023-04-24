@@ -24,6 +24,7 @@ def notes_tab(tab):
         cheat_sheet = converter.cheat_sheet()
         st.text_area("Take notes here:",value=cheat_sheet)
 
+@st.spinner("Grading your quiz...")
 def display_quiz(quiz_questions):
     with st.form("quiz"):
         num_questions = len(quiz_questions)
