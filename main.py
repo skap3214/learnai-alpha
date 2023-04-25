@@ -61,8 +61,9 @@ def get_json():
     get_mcq = convert.mcq()
 
 def mcq_tab(tab):
-    with open('mcq.json', 'r') as f:
-        quiz_questions = json.load(f)
+    with tab:
+        with open('mcq.json', 'r') as f:
+            quiz_questions = json.load(f)
     
     display_quiz(quiz_questions)  
 def chat_tab(tab):
@@ -150,12 +151,12 @@ def main():
         display_video(col1, video_url)
 
         with col2:
-            tab1, tab2, tab3 = st.tabs(["Notes", "Chat", "MCQ"])
+            tab1, tab2, tab3 = st.tabs(["Notes", "MCQ", "Chat"])
             with st.spinner("Loading..."):
                 notes_tab(tab1)
-                chat_tab(tab2)
                 get_json()
-                mcq_tab(tab3)
+                mcq_tab(tab2)
+                chat_tab(tab3)
 
 if __name__ == "__main__":
     main()
