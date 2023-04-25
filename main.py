@@ -27,6 +27,7 @@ def display_video(col1, video_url):
             content = st_ace(theme = "ambiance")
             with st.expander("Answer", expanded=False):
                 st.write(answer)
+        get_json()
 
 def notes_tab(tab):
     with tab:
@@ -66,7 +67,7 @@ def mcq_tab(tab):
             quiz_questions = json.load(f)
     
         display_quiz(quiz_questions)  
-        
+    
 def chat_tab(tab):
     with tab:
         converter = Converter(st.session_state.transcript)
@@ -156,7 +157,6 @@ def main():
             with st.spinner("Loading..."):
                 notes_tab(tab1)
                 chat_tab(tab2)
-                get_json()
                 mcq_tab(tab3)
 
 if __name__ == "__main__":
