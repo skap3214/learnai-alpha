@@ -151,12 +151,12 @@ def main():
         display_video(col1, video_url)
 
         with col2:
-            tab1, tab2, tab3 = st.tabs(["Notes", "MCQ", "Chat"])
+            tab1, tab2, tab3 = st.tabs(["Notes", "Chat", "MCQ"])
             with st.spinner("Loading..."):
                 notes_tab(tab1)
+                chat_tab(tab2)
                 get_json()
-                mcq_tab(tab2)
-                chat_tab(tab3)
+                mcq_tab(tab3)
 
 if __name__ == "__main__":
     main()
