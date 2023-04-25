@@ -1,6 +1,5 @@
 import streamlit as st
 import text_conversions as tc
-import json
 from text_grabber import Text
 from text_conversions import Converter
 from streamlit_ace import st_ace
@@ -27,7 +26,6 @@ def display_video(col1, video_url):
             content = st_ace(theme = "ambiance")
             with st.expander("Answer", expanded=False):
                 st.write(answer)
-        get_json()
 
 def notes_tab(tab):
     with tab:
@@ -56,16 +54,11 @@ def display_quiz(quiz_questions):
             st.write(f"You scored {correct_count} out of {num_questions}!")
             st.balloons()
 
-@st.cache_data
-def get_json():
+def mcq_tab(tab):
     convert = tc.Converter(st.session_state.transcript)
     get_mcq = convert.mcq()
-
-def mcq_tab(tab):
+    quiz_questions = get_mcq
     with tab:
-        with open('mcq.json', 'r') as f:
-            quiz_questions = json.load(f)
-    
         display_quiz(quiz_questions)  
     
 def chat_tab(tab):

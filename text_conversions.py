@@ -74,11 +74,8 @@ class Converter:
         '''
 
         to_json = eval(self.llm(convert_json + "\nThis is the result:\n" + result))
-        json_object = json.dumps(to_json) 
-        # output = json.loads(to_json.strip())
-        with open("mcq.json", "w") as outfile:
-            outfile.write(json_object)
-        # return output
+        return to_json
+
 
     def chatbot(self, question):
         result = self._process_text(question, '')
