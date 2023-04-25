@@ -49,7 +49,7 @@ class Converter:
         result = self._process_text(question, '')
 
         convert_json = '''
-        I will give you a series of Multiple Choice Questions, with their options and answers. I need to convert all of it to a json object. This is an example of how I want the json object to look like:
+        I will give you a series of Multiple Choice Questions, with their options(4 options) and answers. I need to convert all of it to a json object. This is an example of how I want the json object to look like:
         {
             "1" : {
                 "question": "q",
