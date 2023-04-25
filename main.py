@@ -65,7 +65,8 @@ def mcq_tab(tab):
         with open('mcq.json', 'r') as f:
             quiz_questions = json.load(f)
     
-    display_quiz(quiz_questions)  
+        display_quiz(quiz_questions)  
+        
 def chat_tab(tab):
     with tab:
         converter = Converter(st.session_state.transcript)
