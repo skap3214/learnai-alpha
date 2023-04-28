@@ -19,7 +19,7 @@ def display_video(col1, video_url):
             if "transcript" not in st.session_state:
                 st.session_state.transcript = Text().youtube(video_url)
             st.session_state.transcript = Text().youtube(video_url)
-            code_dict = Converter(st.session_state.transcript).generate_code(st.session_state.video_url)
+            code_dict = Converter(st.session_state.transcript).generate_code()
             prompt = code_dict['prompt']
             answer = code_dict['answer']
             st.write("Question", prompt)
