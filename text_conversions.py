@@ -105,10 +105,9 @@ class Converter:
         result = self._process_text(prompt, '')
         return result
     
-    def generate_code(self, youtube_url):
+    def generate_code(self):
         to_text = Text()
-        transcript = to_text.youtube(youtube_url)
-        self.text = transcript
+        self.text = self.transcript
         question = "Create a code prompt and correct code answer using the whole text as context"
         result = self._process_text(question, '')
 
