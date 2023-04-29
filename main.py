@@ -3,6 +3,16 @@ import text_conversions as tc
 from text_grabber import Text
 from text_conversions import Converter
 from streamlit_ace import st_ace
+import openai
+
+def responser(question):
+    response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=[
+            {"role": "user", "content": question}
+        ]
+    )
+    return response["choices"][0]["message"]["content"]
 
 st.set_page_config(
     page_title="LearnAI",
@@ -22,8 +32,19 @@ def display_video(col1, video_url):
             code_dict = Converter(st.session_state.transcript).generate_code()
             prompt = code_dict['prompt']
             answer = code_dict['answer']
-            st.write("Question", prompt)
+            st.write("Question:", prompt)
             content = st_ace(theme = "ambiance")
+            # checks for correct code
+            if (content != ""):
+                code_prompt = '''Could you please verify the correctness of my answer from the question and provide feedback if necessary? (SAY "Nice Try" if incorrect OR "Good Job" if correct. SAY THIS FIRST) (TELL ME CONCISELY)'''
+                prompt_correct_code  = "Question: " + prompt + "\n\n" + "My Answer: " + content + "\n\n\n" + code_prompt 
+                answer_correct_code = responser(prompt_correct_code)
+                if "Good Job" in answer_correct_code:
+                    st.write(answer_correct_code)
+                else:
+                    st.write(answer_correct_code)
+                    prompt_source = "How do I " + prompt #add to source finder / chatbot
+                    st.write(prompt_source)
             with st.expander("Answer", expanded=False):
                 st.write(answer)
 
