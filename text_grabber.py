@@ -7,6 +7,7 @@ import ffmpeg
 import streamlit as st
 from youtube_transcript_api import YouTubeTranscriptApi
 import subprocess
+from moviepy.editor import *
 class Text:
     '''
     to convert a type of file to text, call the type of file as the method name.
@@ -91,6 +92,41 @@ class Text:
         else:
             return transcript
     
+    def mp4(self,video_name,timestamp_yes = False, as_string = True):
+        video = VideoFileClip(video_name)
+        audio = video.audio
+        audio.write_audiofile("audio.mp3")
+        audio = whisper.load_audio("audio.mp3")
+
+        # Load the pre-trained model
+        model = whisper.load_model("tiny", device="cpu")
+
+        # Transcribe the audio
+        result = whisper.transcribe(model, audio, language="en")
+
+        # Save the result to a JSON file
+        timestamps = []
+        transcript = []
+        segments = result['segments']
+        for dict in segments:
+            words = dict['words']
+            for dict_1 in words:
+                word = dict_1['text']
+                start = dict_1['start']
+                end = dict_1['end']
+                transcript.append(word)
+                timestamps.append((start, end))
+
+        os.remove("audio.mp3")
+
+        if as_string:
+            transcript = " ".join(transcript)
+
+        if timestamp_yes:
+            return transcript, timestamps
+        else:
+            return transcript
+
     def pdf(self,pdf_list):
         '''
         pdf_list:
